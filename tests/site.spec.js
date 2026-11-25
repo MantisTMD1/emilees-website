@@ -20,6 +20,17 @@ async function loadImages(page) {
   await page.waitForFunction(() => [...document.images].every((i) => i.complete), null, { timeout: 40000 });
 }
 
+async function scrollThrough(page) {
+  await loadImages(page);
+  await page.evaluate(async () => {
+    for (let y = 0; y <= document.documentElement.scrollHeight; y += 300) {
+      scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 120));
+    }
+  });
+  await page.waitForTimeout(2500);
+}
+
 for (const url of PAGES) {
   test.describe(url, () => {
     test("loads with no errors and every image", async ({ page }) => {
@@ -199,11 +210,49 @@ test("drawings clear the text around them", async ({ page }) => {
   }
 });
 
+for (const url of PAGES) {
+  test(`scroll animations finish and leave nothing hidden ${url}`, async ({ page }) => {
+    await page.goto(url);
+    await expect.poll(() => page.locator(".will-reveal").count()).toBeGreaterThan(5);
+    await scrollThrough(page);
+    expect(await page.locator(".will-reveal").count()).toBe(0);
+    expect(errors).toEqual([]);
+  });
+
+  test(`reduced motion hides nothing ${url}`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(url);
+    expect(await page.locator(".will-reveal").count()).toBe(0);
+  });
+
+  test(`jumping to the bottom leaves nothing hidden ${url}`, async ({ page }) => {
+    await page.goto(url);
+    await loadImages(page);
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(2500);
+    expect(await page.locator(".will-reveal").count()).toBe(0);
+  });
+}
+
+for (const url of PAGES) {
+  test(`link preview ${url}`, async ({ page, request }) => {
+    await page.goto(url);
+    const meta = (name) => page.locator(`meta[property="${name}"]`).getAttribute("content");
+    expect(await meta("og:title")).toBe(await page.title());
+    expect(await meta("og:description")).toBeTruthy();
+    const image = new URL(await meta("og:image"));
+    expect(image.protocol).toBe("https:");
+    const file = await request.get(image.pathname.replace("/emilees-website", ""));
+    expect(file.headers()["content-type"]).toBe("image/png");
+  });
+}
+
 test("screenshots", async ({ page }, info) => {
   for (const url of PAGES) {
     await page.goto(url);
-    await loadImages(page);
-    await page.waitForTimeout(2500);
+    await scrollThrough(page);
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.waitForTimeout(500);
     await page.screenshot({ path: `test-results/shots/${info.project.name}${url.replace(".html", "")}.png`, fullPage: true, scale: "css" });
     if (url === "/index.html") for (const s of [".prints", ".blanket", ".collections__head", ".signup"]) {
       await page.locator(s).evaluate((e) => scrollTo(0, e.getBoundingClientRect().top + scrollY - 450));

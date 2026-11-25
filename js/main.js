@@ -184,3 +184,63 @@ function startReviews() {
   pauseButton.hidden = false;
   setReviewsPaused(reviewsPaused);
 }
+
+// Safari can run this before the stylesheet is in, when nothing has its real position yet.
+function whenStyled(callback) {
+  const styled = getComputedStyle(document.documentElement).getPropertyValue("--bone");
+  if (styled) callback();
+  else requestAnimationFrame(() => whenStyled(callback));
+}
+
+whenStyled(startReveals);
+
+function startReveals() {
+  // Content below the fold animates in once as it is scrolled to. Without JavaScript, or with
+  // reduced motion, nothing is ever hidden.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const groups = {
+    pull: "main h2, .story__pull, .cheers__line",
+    photo: ".blanket__photo, .about__photo, .craft__photo, .dreary__photos li",
+    float: ".friday__art",
+    grow: ".print--wilted",
+    rise: ".deals li, .friday__body > .btn, .section-head .btn, .cards > li, .blanket__body > :not(h2), .tiles li, .about__body > :not(h2), .reviews__head p, .reviews__nav, .reviews__list, .signup > p, .signup form, .story__text > p:not(.story__pull), .dreary__body p, .craft__body p, .cheers__goal",
+  };
+
+  // The huge top margin also catches content that a jump down the page skips over.
+  const observer = new IntersectionObserver((entries) => {
+    let order = 0;
+    for (const entry of entries) {
+      const passed = entry.boundingClientRect.bottom < 0; // jumped straight past it
+      if (!entry.isIntersecting && !passed) continue;
+      observer.unobserve(entry.target);
+      if (passed) {
+        entry.target.classList.remove("will-reveal");
+        continue;
+      }
+      // Things that arrive together follow one another.
+      entry.target.style.setProperty("--reveal-delay", `${Math.min(order++, 6) * 0.08}s`);
+      entry.target.classList.add("is-revealed");
+    }
+  }, { rootMargin: "100000px 0px -8% 0px" });
+
+  for (const [kind, selector] of Object.entries(groups)) {
+    for (const element of document.querySelectorAll(selector)) {
+      if (element.getBoundingClientRect().top < window.innerHeight) continue;
+      element.classList.add("will-reveal", `will-reveal--${kind}`);
+      observer.observe(element);
+    }
+  }
+
+  // Clean up afterwards so nothing lingers on the finished page.
+  document.addEventListener("animationend", (event) => {
+    const { target } = event;
+    if (!target.classList.contains("is-revealed") || !event.animationName.startsWith("reveal-")) return;
+    // A photo's frame finishes before the photo inside it settles.
+    const inner = target.classList.contains("will-reveal--photo") ? 400 : 0;
+    setTimeout(() => {
+      target.classList.remove("will-reveal", "is-revealed", ...Object.keys(groups).map((kind) => `will-reveal--${kind}`));
+      target.style.removeProperty("--reveal-delay");
+    }, inner);
+  });
+}
