@@ -244,3 +244,33 @@ function startReveals() {
     }, inner);
   });
 }
+
+// "Don't miss out!" tab: opens the sign-up pop-up. Dismissing it keeps it away on later visits.
+const teaser = document.querySelector(".teaser");
+const popup = document.querySelector(".popup");
+const TEASER_KEY = "teaser-dismissed";
+
+function remember(key, value) {
+  try {
+    if (value === undefined) return localStorage.getItem(key);
+    localStorage.setItem(key, value);
+  } catch {
+    return null; // private windows can block storage; the tab just shows again
+  }
+}
+
+if (teaser && popup && typeof popup.showModal === "function") {
+  teaser.hidden = remember(TEASER_KEY) === "1";
+  teaser.querySelector(".teaser__open").addEventListener("click", () => popup.showModal());
+  teaser.querySelector(".teaser__close").addEventListener("click", () => {
+    teaser.hidden = true;
+    remember(TEASER_KEY, "1");
+  });
+  // A click on the dimmed backdrop closes the pop-up.
+  popup.addEventListener("click", (event) => {
+    if (event.target === popup) popup.close();
+  });
+  popup.addEventListener("close", () => {
+    if (!teaser.hidden) teaser.querySelector(".teaser__open").focus();
+  });
+}

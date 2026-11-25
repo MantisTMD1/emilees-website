@@ -247,6 +247,65 @@ for (const url of PAGES) {
   });
 }
 
+for (const url of PAGES) {
+  test(`don't miss out tab opens the sign-up ${url}`, async ({ page }) => {
+    await page.goto(url);
+    const open = page.getByRole("button", { name: "Don’t miss out!" });
+    await expect(open).toBeVisible();
+    const popup = page.getByRole("dialog");
+    await open.click();
+    await expect(popup).toBeVisible();
+    await expect(page.locator("#popup-email")).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(popup).toBeHidden();
+    await expect(open).toBeFocused();
+    await open.click();
+    await popup.getByRole("button", { name: "Close" }).click();
+    await expect(popup).toBeHidden();
+    await open.click();
+    await page.mouse.click(5, 5); // backdrop
+    await expect(popup).toBeHidden();
+    // The tab must not cover the back to top button or the footer on any width.
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(600);
+    const tab = await page.locator(".teaser").boundingBox();
+    for (const sel of [".to-top", ".footer p"]) {
+      const b = await page.locator(sel).boundingBox();
+      if (!b || !(await page.locator(sel).isVisible())) continue;
+      const overlap = tab.x < b.x + b.width && b.x < tab.x + tab.width && tab.y < b.y + b.height && b.y < tab.y + tab.height;
+      expect(overlap, sel).toBe(false);
+    }
+  });
+
+  test(`dismissing the tab is remembered ${url}`, async ({ page }) => {
+    await page.goto(url);
+    await page.getByRole("button", { name: "Dismiss" }).click();
+    await expect(page.locator(".teaser")).toBeHidden();
+    await page.reload();
+    await expect(page.locator(".teaser")).toBeHidden();
+  });
+}
+
+test("pop-up subscribes to the newsletter", async ({ page }) => {
+  await page.goto("/index.html");
+  let post = null;
+  await page.route(/mrsunshines\.shop\/contact/, (route) => {
+    post = route.request().postData();
+    route.fulfill({ contentType: "text/html", body: "stopped" });
+  });
+  await page.getByRole("button", { name: "Don’t miss out!" }).click();
+  const popup = page.getByRole("dialog");
+  await popup.getByRole("button", { name: "Subscribe" }).click();
+  await page.waitForTimeout(300);
+  expect(post).toBeNull();
+  await page.locator("#popup-email").fill("test@example.com");
+  await popup.getByRole("button", { name: "Subscribe" }).click();
+  await expect.poll(() => post).not.toBeNull();
+  const fields = new URLSearchParams(post);
+  expect(fields.get("contact[email]")).toBe("test@example.com");
+  expect(fields.get("contact[tags]")).toBe("newsletter");
+});
+
 test("screenshots", async ({ page }, info) => {
   for (const url of PAGES) {
     await page.goto(url);
@@ -258,6 +317,12 @@ test("screenshots", async ({ page }, info) => {
       await page.locator(s).evaluate((e) => scrollTo(0, e.getBoundingClientRect().top + scrollY - 450));
       await page.waitForTimeout(500);
       await page.screenshot({ path: `test-results/shots/${info.project.name}-${s.slice(1)}.png`, scale: "css" });
+    }
+    if (url === "/index.html") {
+      await page.getByRole("button", { name: "Don’t miss out!" }).click();
+      await page.waitForTimeout(600);
+      await page.screenshot({ path: `test-results/shots/${info.project.name}-popup.png`, scale: "css" });
+      await page.keyboard.press("Escape");
     }
   }
 });
