@@ -4,8 +4,10 @@ const PAGES = ["/index.html", "/about.html"];
 const isPhone = (page) => page.viewportSize().width < 700;
 
 let errors;
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, info) => {
   errors = [];
+  // The pop-up opens by itself on a first visit; every test but its own starts as a returning visitor.
+  if (!info.title.includes("opens by itself")) await page.addInitScript(() => localStorage.setItem("popup-shown", "1"));
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
   // Never touch the live store: links and forms that lead there stop here.
@@ -285,6 +287,29 @@ for (const url of PAGES) {
     await expect(page.locator(".teaser")).toBeHidden();
   });
 }
+
+test("pop-up opens by itself on the first visit only", async ({ page }) => {
+  await page.goto("/index.html");
+  const popup = page.getByRole("dialog");
+  await expect(popup).toBeHidden();
+  await expect(popup).toBeVisible({ timeout: 6000 });
+  await expect(popup.getByRole("heading")).toHaveText("Mr. Sunshine’s");
+  await page.keyboard.press("Escape");
+  await expect(popup).toBeHidden();
+  await page.reload();
+  await page.waitForTimeout(4500);
+  await expect(popup).toBeHidden();
+  await page.goto("/about.html");
+  await page.waitForTimeout(4500);
+  await expect(popup).toBeHidden();
+});
+
+test("pop-up stays away once the tab is dismissed (opens by itself)", async ({ page }) => {
+  await page.goto("/index.html");
+  await page.getByRole("button", { name: "Dismiss" }).click();
+  await page.waitForTimeout(4500);
+  await expect(page.getByRole("dialog")).toBeHidden();
+});
 
 test("pop-up subscribes to the newsletter", async ({ page }) => {
   await page.goto("/index.html");

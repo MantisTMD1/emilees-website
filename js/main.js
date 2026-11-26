@@ -245,10 +245,13 @@ function startReveals() {
   });
 }
 
-// "Don't miss out!" tab: opens the sign-up pop-up. Dismissing it keeps it away on later visits.
+// "Don't miss out!" sign-up pop-up. Like the store's, it opens by itself a few seconds after the
+// first visit; after that the tab at the bottom left brings it back. Dismissing the tab keeps both away.
 const teaser = document.querySelector(".teaser");
 const popup = document.querySelector(".popup");
 const TEASER_KEY = "teaser-dismissed";
+const SHOWN_KEY = "popup-shown";
+const AUTO_OPEN_DELAY = 3000;
 
 function remember(key, value) {
   try {
@@ -270,7 +273,20 @@ if (teaser && popup && typeof popup.showModal === "function") {
   popup.addEventListener("click", (event) => {
     if (event.target === popup) popup.close();
   });
+  let fromTab = false;
+  teaser.querySelector(".teaser__open").addEventListener("click", () => { fromTab = true; });
   popup.addEventListener("close", () => {
-    if (!teaser.hidden) teaser.querySelector(".teaser__open").focus();
+    if (fromTab && !teaser.hidden) teaser.querySelector(".teaser__open").focus();
+    fromTab = false;
   });
+
+  if (!teaser.hidden && remember(SHOWN_KEY) !== "1") {
+    setTimeout(() => {
+      // Don't interrupt someone typing or with a menu open, and don't stack on another dialog.
+      const busy = document.activeElement?.matches("input, textarea, select") || document.querySelector("dialog[open], [aria-expanded='true']");
+      if (busy || popup.open || teaser.hidden) return;
+      remember(SHOWN_KEY, "1");
+      popup.showModal();
+    }, AUTO_OPEN_DELAY);
+  }
 }
