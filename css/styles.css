@@ -24,6 +24,11 @@ body { background: var(--black); color: var(--bone); font: 400 1.0625rem/1.55 va
 a { color: inherit; }
 :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
 h1, h2 { font-family: var(--display); font-weight: 400; line-height: 1; text-wrap: balance; }
+/* Screen-print look: a second ink sits slightly off register behind each big heading.
+   Lilac by default, lime on the lilac blanket section. */
+h1, h2 { --misreg: var(--dusk); text-shadow: .055em .045em 0 var(--misreg); }
+.blanket { --misreg: var(--lime); }
+.blanket h2 { --misreg: inherit; }
 h2 { font-size: clamp(2.25rem, 5vw, 4.5rem); }
 p { text-wrap: pretty; }
 
