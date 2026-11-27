@@ -388,7 +388,7 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
 .size-chart thead th:first-child { position: sticky; left: 0; background: var(--ink); text-align: left; padding-left: 12px; }
 .size-chart__note { margin-top: 10px; color: #5c584e; font-size: .875rem; font-style: italic; }
 .cart-link { position: relative; }
-.cart-link__count { position: absolute; top: -6px; right: -9px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--lime); color: var(--ink); font-size: .75rem; font-weight: 700; line-height: 20px; text-align: center; }
+.cart-link__count { position: absolute; top: 1px; right: 4px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--lime); color: var(--ink); font-size: .75rem; font-weight: 700; line-height: 20px; text-align: center; }
 .cart-link__count[hidden] { display: none; }
 .cart { width: min(100%, 440px); max-width: none; height: 100dvh; max-height: none; margin: 0 0 0 auto; padding: 0; border: 0; background: var(--bone); color: var(--ink); }
 .cart[open] { display: flex; flex-direction: column; animation: cart-in .4s var(--ease); }
@@ -483,7 +483,10 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
 .field input, .field textarea { width: 100%; min-height: 44px; padding: 8px 14px; border: 2px solid var(--ink); border-radius: 0; background: #fffaf0; color: var(--ink); font: inherit; }
 .field textarea { min-height: 120px; resize: vertical; }
 .field input:focus-visible, .field textarea:focus-visible { outline: 3px solid var(--dusk); outline-offset: 2px; }
-.contact__form .btn { justify-self: start; min-height: 46px; min-width: 140px; margin-top: 4px; }
+.contact__form .btn { justify-self: start; min-height: 48px; min-width: 150px; margin-top: 6px; border: 2px solid var(--ink); border-radius: 0; background: var(--lime); color: var(--ink); box-shadow: 5px 5px 0 var(--ink); text-transform: uppercase; letter-spacing: .06em; transition: translate .12s, box-shadow .12s, background-color .2s; }
+.contact__form .btn:hover { background: var(--lime); translate: -2px -2px; box-shadow: 7px 7px 0 var(--ink); }
+.contact__form .btn:active { transform: none; translate: 5px 5px; box-shadow: 0 0 0 var(--ink); }
+.contact__form .btn:focus-visible { outline: 3px solid var(--dusk); outline-offset: 4px; }
 .footer__links a[aria-current] { color: var(--lime); }
 
 @media (max-width: 1023px) {
@@ -534,7 +537,7 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
   .contact__pair { grid-template-columns: minmax(0, 1fr); }
   .contact { grid-template-columns: minmax(0, 1fr); }
   .contact__art { order: -1; justify-self: end; width: 74px; margin: -24px 8px -112px 0; }
-  .contact__form .btn { justify-self: stretch; }
+  .contact__form .btn { justify-self: stretch; margin-right: 5px; }
   .teaser button { min-height: 44px; }
   .teaser__open { font-size: 1rem; }
   .signup__row { flex-direction: column; }
