@@ -260,6 +260,9 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
 .footer ul { display: flex; gap: 8px; margin-left: -9px; }
 .footer a { display: grid; place-items: center; width: 44px; height: 44px; }
 .footer p { color: var(--mute); }
+/* Pages still to build: these links point to # for now. */
+.footer__links { display: flex; flex-wrap: wrap; gap: 4px 28px; margin-right: auto; margin-left: clamp(8px, 3vw, 40px); }
+.footer .footer__links a { display: inline-flex; width: auto; min-height: 44px; font-weight: 500; text-decoration: none; }
 
 /* Back to top: appears once the hero has scrolled away */
 .to-top { position: fixed; z-index: 15; right: var(--gut); bottom: 24px; display: grid; place-items: center; width: 52px; height: 52px; border: 2px solid var(--ink); border-radius: 50%; background: var(--lime); color: var(--ink); visibility: hidden; opacity: 0; transform: translateY(16px); transition: opacity .25s, transform .35s var(--ease), visibility .25s, background-color .2s; }
@@ -269,7 +272,7 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
 .to-top svg { transition: transform .3s var(--ease); }
 .to-top:focus-visible { outline: 3px solid var(--lime); box-shadow: 0 0 0 6px var(--ink); }
 /* Keeps the copyright line clear of the button */
-.footer { padding-right: calc(var(--gut) + 72px); }
+.footer { padding-right: calc(var(--gut) + 72px); padding-bottom: 100px; } /* clear of the "Don't miss out!" tab */
 
 /* "Don't miss out!" tab and the sign-up pop-up it opens */
 .teaser { position: fixed; z-index: 15; left: var(--gut); bottom: 24px; display: flex; align-items: center; border-radius: 16px; background: var(--bone); color: var(--ink); box-shadow: 0 10px 30px rgb(0 0 0 / .35); animation: teaser-in .6s 1.2s var(--ease) backwards; }
@@ -504,6 +507,8 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
   .to-top { bottom: 16px; width: 44px; height: 44px; }
   .teaser { bottom: 16px; }
   .footer { padding-bottom: 92px; } /* room for the tab and back to top button */
+  .footer__links { order: 1; flex-basis: 100%; margin: 0; }
+  .footer p { order: 2; }
   .teaser button { min-height: 44px; }
   .teaser__open { font-size: 1rem; }
   .signup__row { flex-direction: column; }
