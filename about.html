@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;500;700&display=swap">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/main.js" defer></script>
+  <script src="js/store.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -41,11 +42,11 @@
           <details class="shop">
             <summary>Shop <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg></summary>
             <ul class="shop__menu">
-              <li><a href="https://mrsunshines.shop/collections/black-friday-deals">BLACK FRIDAY DEALS</a></li>
-              <li><a href="https://mrsunshines.shop/collections/tees">Tees</a></li>
-              <li><a href="https://mrsunshines.shop/collections/hoodies">Hoodies &amp; Jackets</a></li>
-              <li><a href="https://mrsunshines.shop/collections/blankets">Blankets</a></li>
-              <li><a href="https://mrsunshines.shop/collections/tipper-collection">Tipper Collection</a></li>
+              <li><a href="shop.html?c=black-friday-deals">BLACK FRIDAY DEALS</a></li>
+              <li><a href="shop.html?c=tees">Tees</a></li>
+              <li><a href="shop.html?c=hoodies">Hoodies &amp; Jackets</a></li>
+              <li><a href="shop.html?c=blankets">Blankets</a></li>
+              <li><a href="shop.html?c=tipper-collection">Tipper Collection</a></li>
             </ul>
           </details>
         </li>
@@ -60,14 +61,14 @@
     <div class="tools">
       <details class="search">
         <summary aria-label="Search"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.500" cy="10.500" r="7"/><path d="M16 16l5.500 5.500"/></svg></summary>
-        <form class="search__panel" action="https://mrsunshines.shop/search" method="get" role="search">
+        <form class="search__panel" action="shop.html" method="get" role="search">
           <label class="visually-hidden" for="q">Search</label>
           <input id="q" type="search" name="q" placeholder="Search" required>
           <button class="btn btn--lime" type="submit">Search</button>
         </form>
       </details>
       <a class="tools__account" href="https://mrsunshines.shop/account" aria-label="Log in"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4.5"/><path d="M3.5 21c1-4.5 4.5-6.500 8.500-6.500s7.500 2 8.500 6.500"/></svg></a>
-      <a href="https://mrsunshines.shop/cart" aria-label="Cart"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16l-1 13H5L4 8z"/><path d="M8.500 11V7a3.500 3.500 0 017 0v4"/></svg></a>
+      <a class="cart-link" href="https://mrsunshines.shop/cart" aria-label="Cart"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16l-1 13H5L4 8z"/><path d="M8.500 11V7a3.500 3.500 0 017 0v4"/></svg></a>
     </div>
   </header>
 
