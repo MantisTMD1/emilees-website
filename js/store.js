@@ -51,19 +51,18 @@ const Store = (() => {
       available: v.available !== false,
       image: absolute(v.featured_image?.src) || null,
     }));
-    // Size charts on tees are wide images uploaded with the photos. They're shown as real tables on the
-    // product page (js/size-charts.js), so they're kept out of the photos. The women's crop tee is a
-    // different brand with its own chart, so its image stays.
+    // Size charts are wide images uploaded with the photos. They're kept apart (chartImages) so the
+    // product page can show them as real tables instead (js/size-charts.js).
     const fileName = (src) => src.split("/").pop().split("?")[0];
     const sizes = new Map((p.media || []).map((m) => [fileName(m.src), m]));
     const type = p.product_type || p.type || "";
-    const tableCharts = type === "T-Shirt" && !/women/i.test(p.title);
     const isChart = (i) => {
-      const src = typeof i === "string" ? i : i.src;
-      const dims = typeof i === "string" ? sizes.get(fileName(src)) : i;
-      return tableCharts && dims?.width / dims?.height >= 1.75;
+      const dims = typeof i === "string" ? sizes.get(fileName(i)) : i;
+      return dims?.width / dims?.height >= 1.75;
     };
-    const images = p.images.filter((i) => !isChart(i)).map((i) => absolute(typeof i === "string" ? i : i.src));
+    const src = (i) => absolute(typeof i === "string" ? i : i.src);
+    const images = p.images.filter((i) => !isChart(i)).map(src);
+    const chartImages = p.images.filter(isChart).map(src);
     const prices = variants.map((v) => v.price);
     const onSale = variants.filter((v) => v.compareAt > v.price);
     return {
@@ -72,6 +71,7 @@ const Store = (() => {
       type,
       description: p.body_html ?? p.description ?? "",
       images,
+      chartImages,
       options: p.options.map((o) => (typeof o === "string" ? { name: o, values: [] } : { name: o.name, values: o.values })),
       variants,
       price: Math.min(...prices),

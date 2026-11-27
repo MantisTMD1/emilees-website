@@ -121,7 +121,10 @@
     document.title = `${product.title} – Mr. Sunshine’s`;
     titleEl.textContent = product.title;
     desc.innerHTML = cleanHTML(product.description);
-    document.querySelector(".product__charts").replaceChildren(...sizeChartsFor(product).map(sizeChartTable));
+    // Size charts become tables; chart pictures without a table go back at the end of the photos.
+    const { charts, leftover } = sizeChartsFor(product);
+    document.querySelector(".product__charts").replaceChildren(...charts.map(sizeChartTable));
+    product.images = [...product.images, ...leftover];
     mainImg.alt = product.title;
 
     // Gallery

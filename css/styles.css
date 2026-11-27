@@ -285,7 +285,9 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
 /* ---------- Shop pages (shop.html, product.html) and the cart ---------- */
 .shop-page { min-height: 70vh; padding: clamp(40px, 6vw, 88px) var(--gut) var(--pad); background: var(--bone); color: var(--ink); }
 .shop-page__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 32px; margin-bottom: 28px; }
-.shop-page__title { font-size: clamp(2.75rem, 7vw, 6.5rem); }
+/* The home hero's h1 rules (flex: none, big phone size) would stop long collection names wrapping. */
+.shop-page__title { flex: 0 1 auto; min-width: 0; font-size: clamp(2.5rem, 7vw, 6.5rem); line-height: .95; overflow-wrap: anywhere; }
+.product__title { line-height: 1; overflow-wrap: anywhere; }
 .shop-page__count { font-weight: 500; color: #5c584e; }
 .shop-page__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; margin-bottom: clamp(40px, 4.5vw, 56px); padding-bottom: 40px; border-bottom: 2px solid var(--ink); }
 .shop-page__bar { position: relative; }
@@ -362,6 +364,8 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
 .size-chart tbody th { position: sticky; left: 0; width: 8.5em; padding-left: 12px; background: #f8f1e1; font-weight: 500; text-align: left; }
 .size-chart thead td { position: sticky; left: 0; background: var(--ink); }
 .size-chart tbody tr + tr { border-top: 1px solid rgb(21 20 15 / .12); }
+.size-chart thead th:first-child { position: sticky; left: 0; background: var(--ink); text-align: left; padding-left: 12px; }
+.size-chart__note { margin-top: 10px; color: #5c584e; font-size: .875rem; font-style: italic; }
 .cart-link { position: relative; }
 .cart-link__count { position: absolute; top: -6px; right: -9px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--lime); color: var(--ink); font-size: .75rem; font-weight: 700; line-height: 20px; text-align: center; }
 .cart-link__count[hidden] { display: none; }
@@ -426,6 +430,8 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
   .chips a { flex: none; }
   .sort { justify-content: space-between; }
   .tag { top: 8px; left: 8px; font-size: .8125rem; }
+  .shop-page__title { font-size: clamp(2.25rem, 11vw, 3.5rem); }
+  .size-chart tbody th { min-width: 9.5em; }
   .shop-page__bar .print--perch { right: 12%; }
 }
 

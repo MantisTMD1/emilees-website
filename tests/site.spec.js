@@ -480,6 +480,12 @@ test("tees show size chart tables instead of chart images", async ({ page }) => 
   await expect(chart.locator("thead th")).toHaveText(["S", "M", "L", "XL", "2XL", "3XL", "4XL"]);
   await expect(chart.getByRole("row", { name: /Chest Width/ }).locator("td")).toHaveText(["18 1/4", "20 1/4", "22", "24", "26", "27 3/4", "29 3/4"]);
   await expect(page.getByRole("heading", { name: "Cropped Tee Size Chart" })).toHaveCount(0);
+  // Long collection names wrap instead of pushing the page sideways.
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.route(/^https:\/\/mrsunshines\.shop\/collections\/[\w-]+\.json/, (route) => route.fulfill({ contentType: "application/json", headers: { "Access-Control-Allow-Origin": "*" }, body: JSON.stringify({ collection: { title: "BLACK FRIDAY DEALS" } }) }));
+  await page.goto("/shop.html?c=black-friday-deals");
+  await expect(page.locator(".shop-page__title")).toHaveText("BLACK FRIDAY DEALS");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
   await page.goto("/shop.html?c=tees");
   expect(await page.locator(".shop-grid img").evaluateAll((imgs) => imgs.map((i) => i.src).join(" "))).not.toContain("C05D9E52");
 });
