@@ -76,10 +76,13 @@ function updateToTop() {
   toTop.classList.toggle("is-visible", pastHero && (!phone.matches || scrollingUp));
 }
 
-new IntersectionObserver(([entry]) => {
-  pastHero = !entry.isIntersecting;
-  updateToTop();
-}).observe(document.querySelector("#top"));
+const hero = document.querySelector("#top");
+if (hero) {
+  new IntersectionObserver(([entry]) => {
+    pastHero = !entry.isIntersecting;
+    updateToTop();
+  }).observe(hero);
+}
 
 window.addEventListener("scroll", () => {
   const moved = window.scrollY - lastScroll;
