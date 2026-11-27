@@ -260,6 +260,14 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
 .footer ul { display: flex; gap: 8px; margin-left: -9px; }
 .footer a { display: grid; place-items: center; width: 44px; height: 44px; }
 .footer p { color: var(--mute); }
+.footer ul { align-items: center; }
+.footer .footer__shop { display: inline-flex; align-items: center; gap: 6px; width: auto; height: 36px; margin-left: 10px; padding: 0 14px 0 12px; border-radius: 999px; background: #5a31f4; color: #fff; font-size: .875rem; font-weight: 600; text-decoration: none; transition: background-color .2s, translate .2s; }
+.footer .footer__shop svg { flex: none; }
+.footer .footer__shop span { white-space: nowrap; }
+.footer .footer__shop svg:first-child { width: 16px; height: 16px; }
+.footer .footer__shop svg:last-child { width: 40px; height: 17px; margin-top: 2px; }
+.footer .footer__shop:hover { background: #4524db; color: #fff; translate: 0 -2px; }
+.footer .footer__shop:active { translate: 0 0; }
 /* Pages still to build: these links point to # for now. */
 .footer__links { display: flex; flex-wrap: wrap; gap: 4px 28px; margin-right: auto; margin-left: clamp(8px, 3vw, 40px); }
 .footer .footer__links a { display: inline-flex; width: auto; min-height: 44px; font-weight: 500; text-decoration: none; }
