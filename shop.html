@@ -23,15 +23,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.shopify.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="css/styles.css">
-  <script src="js/main.js" defer></script>
-  <script src="js/store.js" defer></script>
-  <script src="js/shop-page.js" defer></script>
+  <!-- Closing the shipping banner hides it for the rest of this visit (no flash between pages); it's back next visit. -->
+  <script>try { if (sessionStorage.getItem("notice-dismissed") === "1") document.documentElement.classList.add("no-notice"); } catch {}</script>
+  <link rel="stylesheet" href="css/styles.css?v=4">
+  <script src="js/main.js?v=4" defer></script>
+  <script src="js/store.js?v=4" defer></script>
+  <script src="js/shop-page.js?v=4" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <p class="notice">Free Domestic Shipping on orders over $70</p>
+  <div class="notice">
+    <a href="shop.html"><span>Free Domestic Shipping on orders over $70</span><svg class="notice__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+    <button class="notice__close" type="button" aria-label="Hide announcement"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
 
   <header class="header">
     <button class="menu-button" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="menu-button__open" d="M3 6h18M3 12h18M3 18h18"/><path class="menu-button__close" d="M5 5l14 14M19 5L5 19"/></svg></button>
@@ -73,10 +78,6 @@
     </div>
   </header>
 
-  <!-- Lifts Emilee's beetle off its product photo: anything the colour of the cloth turns transparent. -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <filter id="ink-bug" color-interpolation-filters="sRGB"><feColorMatrix values="0 0 0 0 .86  0 0 0 0 .3  0 0 0 0 .25  4 0 -4 0 -.7"/></filter>
-  </svg>
   <main id="main">
     <!-- Filled from Shopify by js/shop-page.js: ?c=<collection handle>, or ?q=<search> -->
     <section class="shop-page" id="top">
@@ -103,7 +104,7 @@
             <option value="title-desc">Alphabetically, Z-A</option>
           </select>
         </label>
-        <div class="print print--bug print--perch" aria-hidden="true"><img src="https://cdn.shopify.com/s/files/1/0549/8870/1912/files/EDDA5BA5-9668-4320-99AC-26D1D74CAB42.jpg?width=1200" srcset="https://cdn.shopify.com/s/files/1/0549/8870/1912/files/EDDA5BA5-9668-4320-99AC-26D1D74CAB42.jpg?width=600 600w, https://cdn.shopify.com/s/files/1/0549/8870/1912/files/EDDA5BA5-9668-4320-99AC-26D1D74CAB42.jpg?width=800 800w, https://cdn.shopify.com/s/files/1/0549/8870/1912/files/EDDA5BA5-9668-4320-99AC-26D1D74CAB42.jpg?width=1200 1200w, https://cdn.shopify.com/s/files/1/0549/8870/1912/files/EDDA5BA5-9668-4320-99AC-26D1D74CAB42.jpg?width=1600 1600w, https://cdn.shopify.com/s/files/1/0549/8870/1912/files/EDDA5BA5-9668-4320-99AC-26D1D74CAB42.jpg?width=2400 2400w" sizes="(max-width: 699px) 380px, 520px" width="1000" height="1462" alt="" loading="lazy" decoding="async"></div>
+        <img class="perch" src="images/beetle.png" width="400" height="434" alt="" aria-hidden="true">
       </div>
       <ul class="cards shop-grid" aria-busy="true"></ul>
       <nav class="pager" aria-label="Pagination" hidden></nav>

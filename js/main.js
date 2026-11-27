@@ -245,6 +245,14 @@ function startReveals() {
   });
 }
 
+// Shipping banner: its × hides it for the rest of this visit (this tab, until the browser is closed),
+// the way most shops do it. It shows again on the next visit.
+document.querySelector(".notice__close")?.addEventListener("click", () => {
+  document.documentElement.classList.add("no-notice");
+  try { sessionStorage.setItem("notice-dismissed", "1"); } catch { /* storage blocked: hidden on this page only */ }
+});
+try { localStorage.removeItem("notice-dismissed"); } catch { /* left over from when closing it was permanent */ }
+
 // "Don't miss out!" sign-up pop-up. Like the store's, it opens by itself a few seconds after the
 // first visit; after that the tab at the bottom left brings it back. Dismissing the tab keeps both away.
 const teaser = document.querySelector(".teaser");
