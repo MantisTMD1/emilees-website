@@ -120,6 +120,7 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
 @keyframes rise { from { clip-path: inset(100% 0 0); } to { clip-path: inset(0); } }
 .lineup a { position: relative; display: block; height: 100%; overflow: hidden; text-decoration: none; }
 .lineup a:focus-visible { outline-offset: -6px; }
+.lineup-bar { display: none; }
 .lineup img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
 .lineup__tag { position: absolute; left: 12px; bottom: 12px; display: flex; flex-wrap: wrap; gap: 0 10px; max-width: calc(100% - 24px); padding: 7px 14px; border-radius: 18px; background: var(--black); font-size: .9375rem; font-weight: 500; }
 @media (hover: hover) and (min-width: 700px) {
@@ -487,6 +488,15 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
 .contact__form .btn:hover { background: var(--lime); translate: -2px -2px; box-shadow: 7px 7px 0 var(--ink); }
 .contact__form .btn:active { transform: none; translate: 5px 5px; box-shadow: 0 0 0 var(--ink); }
 .contact__form .btn:focus-visible { outline: 3px solid var(--dusk); outline-offset: 4px; }
+/* Policy pages */
+.policy { padding: clamp(40px, 5vw, 72px) var(--gut) clamp(56px, 6vw, 96px); background: var(--bone); color: var(--ink); }
+.policy h1, .policy__body { max-width: 40rem; margin-inline: auto; }
+.policy h1 { margin-bottom: 28px; font-size: clamp(2.5rem, 5vw, 4rem); }
+.policy__body { padding: clamp(20px, 3vw, 32px); border: 2px solid var(--ink); background: #fffaf0; box-shadow: 6px 6px 0 var(--ink); }
+.policy__body p + p { margin-top: 1em; }
+.policy__body h2 { margin: 32px 0 12px; padding-top: 28px; border-top: 2px solid var(--ink); font-size: clamp(1.5rem, 2.4vw, 1.875rem); line-height: 1.1; text-shadow: .06em .05em 0 var(--misreg); }
+.policy__body a { font-weight: 700; overflow-wrap: anywhere; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.policy__body a:hover { background: var(--lime); }
 .footer__links a[aria-current] { color: var(--lime); }
 
 @media (max-width: 1023px) {
@@ -524,6 +534,11 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
   .lineup { overflow-x: auto; scroll-snap-type: x mandatory; }
   .lineup li { flex: 0 0 62vw; scroll-snap-align: start; }
   .lineup a { height: auto; aspect-ratio: 4 / 5; }
+  .lineup { scrollbar-width: none; }
+  .lineup::-webkit-scrollbar { display: none; }
+  .lineup.is-nudging li { animation: lineup-nudge 1.2s var(--ease); }
+  .lineup-bar { display: block; height: 4px; margin: 14px var(--gut) 0; overflow: hidden; border-radius: 4px; background: #3a3833; }
+  .lineup-bar span { display: block; height: 100%; border-radius: inherit; background: var(--lime); }
   .cards { grid-template-columns: 1fr 1fr; }
   .tiles { grid-template-columns: 1fr; }
   .deals a { grid-template-columns: 60px 1fr auto; gap: 14px; }
@@ -543,6 +558,8 @@ h1 { flex: none; font-size: clamp(3rem, 8.2vw, 8.5rem); line-height: .88; }
   .signup__row { flex-direction: column; }
   .signup input[type=email] { flex: none; }
 }
+
+@keyframes lineup-nudge { 0%, 100% { translate: 0 0; } 45% { translate: -64px 0; } 70% { translate: -52px 0; } }
 
 /* Scroll animations: main.js adds .will-reveal to things below the fold, then .is-revealed as they arrive */
 .will-reveal { opacity: 0; }

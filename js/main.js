@@ -188,6 +188,45 @@ function startReviews() {
   setReviewsPaused(reviewsPaused);
 }
 
+// Phones: the hero photos scroll sideways. A bar under them shows where you are, and the row
+// nudges left once so it's clear it moves.
+const lineup = document.querySelector(".lineup");
+if (lineup) {
+  const phoneLayout = window.matchMedia("(max-width: 699px)");
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const bar = document.createElement("div");
+  bar.className = "lineup-bar";
+  bar.setAttribute("aria-hidden", "true");
+  bar.innerHTML = "<span></span>";
+  lineup.after(bar);
+  const thumb = bar.firstChild;
+
+  let queued = false;
+  const drawBar = () => {
+    queued = false;
+    const room = lineup.scrollWidth - lineup.clientWidth;
+    const share = lineup.clientWidth / (lineup.scrollWidth || 1);
+    thumb.style.width = `${share * 100}%`;
+    thumb.style.translate = `${room > 0 ? (lineup.scrollLeft / room) * ((1 - share) / share) * 100 : 0}% 0`;
+  };
+  const queueBar = () => { if (!queued) { queued = true; requestAnimationFrame(drawBar); } };
+  lineup.addEventListener("scroll", queueBar, { passive: true });
+  window.addEventListener("resize", queueBar);
+  drawBar();
+
+  let touched = false;
+  const stop = () => { touched = true; lineup.classList.remove("is-nudging"); };
+  lineup.addEventListener("pointerdown", stop, { passive: true });
+  lineup.addEventListener("scroll", () => { if (lineup.scrollLeft > 4) stop(); }, { passive: true });
+  lineup.addEventListener("animationend", (event) => {
+    if (event.animationName === "lineup-nudge") lineup.classList.remove("is-nudging");
+  });
+  setTimeout(() => {
+    if (touched || calm.matches || !phoneLayout.matches || lineup.scrollLeft > 4) return;
+    lineup.classList.add("is-nudging");
+  }, 1400);
+}
+
 // Safari can run this before the stylesheet is in, when nothing has its real position yet.
 function whenStyled(callback) {
   const styled = getComputedStyle(document.documentElement).getPropertyValue("--bone");
